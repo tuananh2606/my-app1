@@ -1,13 +1,13 @@
+import "@formatjs/intl-pluralrules/locale-data/en";
+import "@formatjs/intl-pluralrules/polyfill";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { IntlProvider } from "react-intl";
 import { Provider } from "react-redux";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import App from "./App";
 import store from "./app/store";
 import "./index.css";
-import viMessages from "./lang/vi.json";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,9 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <IntlProvider locale="vi" defaultLocale="en" messages={viMessages}>
-          <App />
-        </IntlProvider>
+        <App />
       </PersistGate>
     </Provider>
   </React.StrictMode>

@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserState {
-  username: string;
+  email: string;
   name: string;
   role: string;
 }
 
 const initialState: UserState = {
-  username: "",
+  email: "",
   name: "",
   role: "",
 };
@@ -21,12 +21,12 @@ export const userSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.username = payload.username;
+      state.email = payload.email;
       state.name = payload.name;
       state.role = payload.role;
     },
     logOut: (state) => {
-      state.username = "";
+      state.email = "";
       state.name = "";
       state.role = "";
     },

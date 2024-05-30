@@ -1,5 +1,17 @@
 {
   "home": "Trang chủ",
   "login": "Đăng nhập",
-  "logout": "Đăng xuất"
+  "logout": "Đăng xuất",
+  "email": "Email",
+  "post": "bài viết",
+  "posts": "bài viết",
+  "password": "Mật khẩu",
+  "validate.required": "Vui lòng nhập {type}",
+  "validate.isValid": "{type} không hợp lệ",
+  "validate.formatPassword": "Mật khẩu phải chứa chữ in hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự.",
+  "login.rememberMe": "Nhớ đăng nhập",
+  "login.forgotPassword": "Quên mật khẩu",
+  "or": "Hoặc",
+  "login.registerNow": "Đăng ký ngay",
+  "modal.title.update": "Thay đổi bản ghi"
 }

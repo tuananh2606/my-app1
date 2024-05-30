@@ -1,20 +1,28 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import postReducer from "../features/post/postSlice";
 import userReducer from "../features/user/userSlice";
 
 const persistConfig = {
-  key: "user",
+  key: "root",
   storage,
+  // whitelist: ["user"],
+  // blacklist: ["post"],
 };
 
 const reducers = combineReducers({
   user: userReducer,
+  post: postReducer,
 });
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

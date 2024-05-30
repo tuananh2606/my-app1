@@ -9,19 +9,19 @@ import {
   Input,
   Typography,
 } from "antd";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../features/user/userSlice";
 
 type FieldType = {
-  username?: string;
+  email?: string;
   password?: string;
   remember?: string;
 };
 
 interface User {
-  username: string;
+  email: string;
   password: string;
   role: string;
 }
@@ -30,32 +30,37 @@ type UserFind = Omit<User, "role">;
 
 const account: User[] = [
   {
-    username: "test123",
-    password: "12345678",
+    email: "test@gmail.com",
+    password: "Test123@",
     role: "user",
   },
   {
-    username: "test000",
+    email: "test000",
     password: "12345678",
     role: "admin",
   },
 ];
 
+const nameRegex =
+  /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?:[ ][A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$/m;
+const passwordReg =
+  /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
+
 const LoginPage = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const intl = useIntl();
 
   const findUser = (user: UserFind) => {
     return account.find(
-      (_user) =>
-        _user.password === user.password && _user.username === user.username
+      (_user) => _user.password === user.password && _user.email === user.email
     ) as User;
   };
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     const user = {
-      username: values.username as string,
+      email: values.email as string,
       password: values.password as string,
     };
     const { password, ...userFound } = findUser(user);
@@ -75,6 +80,9 @@ const LoginPage = () => {
   ) => {
     console.log("Failed:", errorInfo);
   };
+
+  const [form] = Form.useForm();
+
   return (
     <Flex
       align="center"
@@ -115,51 +123,138 @@ const LoginPage = () => {
           className="flex flex-col"
         >
           <Form.Item
-            name="username"
+            name="email"
             validateTrigger="onBlur"
             rules={[
-              { required: true, message: "Please input your username!" },
-              { min: 6 },
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="validate.required"
+                    values={{
+                      type: (
+                        <span className="lowercase">
+                          <FormattedMessage id="email" />
+                        </span>
+                      ),
+                    }}
+                  />
+                ),
+                // intl.formatMessage({
+                //   id: "validate.required",
+                // }),
+              },
+              {
+                type: "email",
+                message: (
+                  <FormattedMessage
+                    id="validate.isValid"
+                    values={{
+                      type: <FormattedMessage id="email" />,
+                    }}
+                  />
+                ),
+              },
             ]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               allowClear
-              autoComplete="username"
+              autoComplete="email"
               size="large"
-              placeholder="Username"
+              placeholder={intl.formatMessage({ id: "email" })}
             />
           </Form.Item>
+          {/* <Form.Item
+            name="name"
+            validateTrigger="onBlur"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (value) {
+                    console.log(nameRegex.test(value));
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("The new password that you entered do not match!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              allowClear
+              autoComplete="name"
+              size="large"
+              placeholder="Name"
+            />
+          </Form.Item> */}
           <Form.Item
             name="password"
+            validateFirst
             validateTrigger="onBlur"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="validate.required"
+                    key="password"
+                    values={{
+                      type: (
+                        <span className="lowercase">
+                          {intl.formatMessage({ id: "password" })}
+                        </span>
+                      ),
+                    }}
+                  />
+                ),
+              },
+              {
+                validator(_, value) {
+                  if (passwordReg.test(value)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    <FormattedMessage id="validate.formatPassword" />
+                  );
+                },
+              },
+              // ({ validateFields }) => ({
+              //   validator(_, value) {
+              //     validateFields({ dirty: true }).then();
+              //   },
+              // }),
+            ]}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               autoComplete="current-password"
               size="large"
               type="password"
-              placeholder="Password"
+              placeholder={intl.formatMessage({ id: "password" })}
             />
           </Form.Item>
           <Form.Item className="flex-1">
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox>
+                <FormattedMessage id="login.rememberMe" />
+              </Checkbox>
             </Form.Item>
 
             <a className="float-right text-[#1677ff]" href="">
-              Forgot password
+              <FormattedMessage id="login.forgotPassword" />
             </a>
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" className="w-full">
-              Log in
+              <FormattedMessage id="login" />
             </Button>
-            Or{" "}
+            <FormattedMessage id="or" />{" "}
             <a className="text-[#1677ff]" href="">
-              register now!
+              <FormattedMessage id="login.registerNow" />
             </a>
           </Form.Item>
         </Form>

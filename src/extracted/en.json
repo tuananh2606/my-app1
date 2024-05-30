@@ -1,5 +1,18 @@
 {
   "home": "Home",
   "login": "Login",
-  "logout": "Logout"
+  "logout": "Logout",
+  "email": "Email",
+  "post": "post",
+  "posts": "posts",
+  "password": "Password",
+  "validate.required": "Please input your {type}",
+  "validate.isValid": "The input is not valid {type}",
+  "validate.formatPassword": "Password must contains a capitalize letter, a lowercase, a number, a special character and at least 8 characters.",
+  "login.rememberMe": "Remember me",
+  "login.forgotPassword": "Forgot password",
+  "or": "Or",
+  "login.registerNow": "Register now",
+  "modal.title.add": "Create new record",
+  "modal.title.update": "Edit record"
 }
