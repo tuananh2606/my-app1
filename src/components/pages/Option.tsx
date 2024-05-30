@@ -11,10 +11,10 @@ import {
 } from "antd";
 
 import { useMemo, useState } from "react";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { createPost } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { deleteRecord, updateRecord } from "../../features/post/postSlice";
+import { deletePost, updatePost } from "../../features/post/postSlice";
 import useFetch from "../../hooks/useFetch";
 import { Post } from "../../type";
 
@@ -29,7 +29,6 @@ interface UpdateModalProps extends DataType, AddModalProps {}
 
 const Option = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
   const [modalProps, setModalProps] = useState<
     AddModalProps | UpdateModalProps
   >({
@@ -78,13 +77,13 @@ const Option = () => {
       dispatch(createPost({ ...rest }));
     }
     if (modalProps?.type === "update") {
-      dispatch(updateRecord(values));
+      dispatch(updatePost(values));
     }
     form.resetFields();
   };
 
   const confirm = (id: number | undefined) => {
-    dispatch(deleteRecord(id));
+    dispatch(deletePost(id));
   };
 
   const columns: TableProps<DataType>["columns"] = [
@@ -124,7 +123,7 @@ const Option = () => {
               })
             }
           >
-            Edit
+            <FormattedMessage id="edit" />
           </Button>
           <Popconfirm
             title="Delete the task"
@@ -134,7 +133,7 @@ const Option = () => {
             cancelText="No"
           >
             <Button type="primary" danger ghost>
-              Delete
+              <FormattedMessage id="delete" />
             </Button>
           </Popconfirm>
         </Space>
@@ -149,7 +148,7 @@ const Option = () => {
           form: "create-form",
           htmlType: "submit",
         }}
-        title={modalProps?.name}
+        title={<FormattedMessage id="modal.title.create" />}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -227,15 +226,16 @@ const Option = () => {
             })
           }
         >
-          Add
+          <FormattedMessage id="add" />
         </Button>
         <Table
           rowSelection={{
             type: "checkbox",
           }}
           dataSource={newData as DataType[]}
-          loading={loading || postState.loading === "pending" ? true : false}
+          loading={loading || postState.status === "pending" ? true : false}
           columns={columns}
+          rowKey={(record) => record.id + ""}
         />
       </Flex>
     </>

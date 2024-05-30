@@ -13,5 +13,9 @@
   "login.forgotPassword": "Quên mật khẩu",
   "or": "Hoặc",
   "login.registerNow": "Đăng ký ngay",
-  "modal.title.update": "Thay đổi bản ghi"
+  "modal.title.update": "Thay đổi bản ghi",
+  "modal.title.create": "Thêm bản ghi",
+  "add": "Thêm",
+  "edit": "Sửa",
+  "delete": "Xóa"
 }

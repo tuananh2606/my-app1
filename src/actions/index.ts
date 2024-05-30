@@ -3,7 +3,7 @@ import { axiosHandler } from "../App";
 import { Post } from "../type";
 
 export const createPost = createAsyncThunk(
-  "posts/createPost",
+  "post/createPost",
   async ({ userId, title, body }: Post) => {
     const response = await axiosHandler.post("/posts", {
       title: title,

@@ -14,5 +14,9 @@
   "or": "Or",
   "login.registerNow": "Register now",
   "modal.title.add": "Create new record",
-  "modal.title.update": "Edit record"
+  "modal.title.update": "Edit record",
+  "modal.title.create": "Create new record",
+  "add": "Add",
+  "edit": "Edit",
+  "delete": "Delete"
 }

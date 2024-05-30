@@ -5,21 +5,22 @@ import { Post } from "../../type";
 // Define a type for the slice state
 interface PostState {
   posts: Post[];
-  loading: "idle" | "pending" | "complete" | "error";
+  status: "idle" | "pending" | "complete" | "error";
+  success?: false;
 }
 
 // Define the initial state using that type
-const initialState: PostState = { posts: [], loading: "idle" };
+const initialState: PostState = { posts: [], status: "idle" };
 
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    updateRecord: (state, { payload }) => {
+    updatePost: (state, { payload }) => {
       const idx = state.posts.findIndex((item) => item.id === payload.id);
       state.posts[idx] = { ...payload };
     },
-    deleteRecord: (state, { payload }) => {
+    deletePost: (state, { payload }) => {
       const idx = state.posts.findIndex((item) => item.id === payload.id);
       state.posts.splice(idx, 1);
     },
@@ -27,18 +28,18 @@ export const postSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createPost.pending, (state) => {
-        state.loading = "pending";
+        state.status = "pending";
       })
       .addCase(createPost.fulfilled, (state, { payload }) => {
         state.posts.push(payload);
-        state.loading = "complete";
+        state.status = "complete";
       })
       .addCase(createPost.rejected, (state) => {
-        state.loading = "error";
+        state.status = "error";
       });
   },
 });
 
-export const { updateRecord, deleteRecord } = postSlice.actions;
+export const { updatePost, deletePost } = postSlice.actions;
 
 export default postSlice.reducer;

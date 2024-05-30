@@ -7,7 +7,7 @@ import userReducer from "../features/user/userSlice";
 const persistConfig = {
   key: "root",
   storage,
-  // whitelist: ["user"],
+  whitelist: ["user"],
   // blacklist: ["post"],
 };
 
